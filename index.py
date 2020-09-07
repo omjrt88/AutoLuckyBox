@@ -21,20 +21,23 @@ Users = [
   {
     "user": "omjrt88@hotmail.com", 
     "password": "!234s678"
+  },
+  {
+    "user": "chinasr15@hotmail.com", 
+    "password": "123456"
   }
 ]
 
 def InitiateProgram():
   try:
     #Worker(Users[0])
-
     with Pool(len(Users)) as p:
       p.map(Worker, Users)
       p.terminate()
       p.join()
 
   except Exception as e:
-    print("Aca hay un error, empezando de nuevo...")
+    print("ERROR, Starting again...")
     print(e)
 
 def Worker(user):
@@ -42,7 +45,6 @@ def Worker(user):
   WaitUntil5()
   Doloop(site, user)
   
-
 def WaitUntil5():
   startTime = (datetime.now()).replace(hour = 16, minute = 59, second = 50)
   print("Wait until: ")
@@ -56,33 +58,35 @@ def Doloop(site, user):
 
 def CheckResults(site, user):
   if site.findElement(By.ID, 'bGenerar'):
-    print("Boton encontrado!")
+    print("Buttom found it!")
     Generar(site, user)
   elif "email con el código QR" in site.getDriver().Instance.page_source:
     Completed(site, user)
   elif "Reenviar Email" in site.getDriver().Instance.page_source:
     Completed(site, user)
   elif "503" in site.getDriver().Instance.page_source:
-    Page503(site, user)
+    GoAgain(site, user)
   else:
-    Doloop(site, user)
+    GoAgain(site, user)
 
 def Generar(site, user):
-  print("Loggueado, Empezando a generar..."+ user["user"])
+  print("Logged, Starting to generate..."+ user["user"])
   site.clickBy(By.ID, 'bGenerar')
   CheckResults(site, user)
 
 def Completed(site, user):
   print("Did it, check Email "+ user["user"])
-  #time.sleep(10)
+  currentDate = (datetime.now()).strftime("%d_%B_%Y")
+  #time.sleep(5)
+  site.getDriver().Instance.get_screenshot_as_file(user["user"]+"_"+currentDate+".png")
   Close(site)
 
 def Close(site):
   site.closeThisPage()
   #sys.exit(0)
 
-def Page503(site, user):
-  print("Intentando otra vez...")
+def GoAgain(site, user):
+  print("Trying again...")
   site.getDriver().Instance.get(baseUrl)
   Doloop(site, user)
 
