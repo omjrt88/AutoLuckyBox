@@ -60,12 +60,14 @@ def CheckResults(site, user):
   if site.findElement(By.ID, 'bGenerar'):
     print("Buttom found it!")
     Generar(site, user)
+  elif "503" in site.getDriver().Instance.page_source:
+    GoAgain(site, user)
+  elif "Page not" in site.getDriver().Instance.page_source:
+    GoAgain(site, user)
   elif "email con el código QR" in site.getDriver().Instance.page_source:
     Completed(site, user)
   elif "Reenviar Email" in site.getDriver().Instance.page_source:
     Completed(site, user)
-  elif "503" in site.getDriver().Instance.page_source:
-    GoAgain(site, user)
   else:
     GoAgain(site, user)
 
