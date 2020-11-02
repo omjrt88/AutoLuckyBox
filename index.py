@@ -12,7 +12,9 @@ from clint.textui import progress
 from Library.Site import SiteMetaData
 from selenium.webdriver.support import expected_conditions as EC
 
-baseUrl = "https://www.fichascr.com/GeneradorFichas.php?CodTienda=4"
+# baseUrl = "https://www.fichascr.com/GeneradorFichas.php?CodTienda=2" #Saldos Usa
+# baseUrl = "https://www.fichascr.com/GeneradorFichas.php?CodTienda=1" #el tesoro
+baseUrl = "https://www.fichascr.com/GeneradorFichas.php?CodTienda=4" #lucky
 Users = [
   {
     "user": "omjrt88@gmail.com", 
@@ -21,6 +23,24 @@ Users = [
   {
     "user": "omjrt88@hotmail.com", 
     "password": "!234s678"
+  },
+  ## El Tesoro Alajueja
+  #   {
+  #   "user": "ka291986@hotmail.com", 
+  #   "password": "123456"
+  # },
+  #   {
+  #   "user": "sofiadaniela.sequeira@gmail.com", 
+  #   "password": "123456"
+  # },
+  #   {
+  #   "user": "daisyrojasarauz.02@gmail.com", 
+  #   "password": "123456"
+  # }
+  ## LuckyBox
+  {
+    "user": "chinasr16@gmail.com", 
+    "password": "angelina12"
   },
   {
     "user": "chinasr15@hotmail.com", 
@@ -42,11 +62,14 @@ def InitiateProgram():
 
 def Worker(user):
   site = SiteMetaData(baseUrl, True, False)
+  CheckSecurePage(site)
   WaitUntil5()
   Doloop(site, user)
   
 def WaitUntil5():
-  startTime = (datetime.now()).replace(hour = 16, minute = 59, second = 50)
+  startTime = (datetime.now()).replace(hour = 16, minute = 59, second = 50) # Lucky
+  # startTime = (datetime.now()).replace(hour = 15, minute = 59, second = 50) # El tesoro
+  # startTime = (datetime.now()).replace(hour = 19, minute = 59, second = 50) # Saldos USA
   print("Wait until: ")
   print(startTime)
   pause.until(startTime)
@@ -96,6 +119,12 @@ def DoLogin(site, user, password):
   site.setTextBy(By.ID, 'txtEmail', user)
   site.setTextBy(By.ID, 'txtClave', password)
   site.clickBy(By.XPATH, '//input[@value="Ingresar"]')
+
+def CheckSecurePage(site):
+  if "ERR_CERT_COMMON_NAME_INVALID" in site.getDriver().Instance.page_source:
+    if site.findElement(By.ID, 'details-button'):
+      site.clickBy(By.ID, 'details-button')
+      site.clickBy(By.ID, 'proceed-link')
     
 if __name__ == '__main__':  
   InitiateProgram()
