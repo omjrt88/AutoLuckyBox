@@ -45,6 +45,14 @@ Users = [
   {
     "user": "chinasr15@hotmail.com", 
     "password": "123456"
+  },
+  {
+    "user": "sofiadaniela.sequeira@gmail.com", 
+    "password": "123456"
+  },
+  {
+    "user": "ssequeiratorres@gmail.com", 
+    "password": "123456"
   }
 ]
 
