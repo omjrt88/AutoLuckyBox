@@ -5,6 +5,7 @@ import wget
 import requests
 import time
 import pause
+import signal
 from multiprocessing import Pool
 from datetime import datetime  
 from selenium.webdriver.common.by import By
@@ -46,14 +47,14 @@ Users = [
     "user": "chinasr15@hotmail.com", 
     "password": "123456"
   },
-  {
-    "user": "sofiadaniela.sequeira@gmail.com", 
-    "password": "123456"
-  },
-  {
-    "user": "ssequeiratorres@gmail.com", 
-    "password": "123456"
-  }
+  # {
+  #   "user": "sofiadaniela.sequeira@gmail.com", 
+  #   "password": "123456"
+  # },
+  # {
+  #   "user": "ssequeiratorres@gmail.com", 
+  #   "password": "123456"
+  # }
 ]
 
 def InitiateProgram():
@@ -68,7 +69,17 @@ def InitiateProgram():
     print("ERROR, Starting again...")
     print(e)
 
+def signal_handler(signal, frame):
+    print('You pressed Ctrl+C!')
+    # for p in jobs:
+    #     p.terminate()
+    sys.exit(0)
+    print('Terminated!!')
+
 def Worker(user):
+  signal.signal(signal.SIGTERM, signal_handler)
+  signal.signal(signal.SIGINT, signal_handler)
+  # signal.signal(signal.SIGQUIT, signal_handler)
   site = SiteMetaData(baseUrl, True, False)
   CheckSecurePage(site)
   WaitUntil5()

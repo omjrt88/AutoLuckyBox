@@ -15,8 +15,8 @@ def Initialize(headless = False):
         options.add_argument("--log-level=3")
         options.add_argument("headless")
         options.add_experimental_option('excludeSwitches',['enable-logging']);
-    # options.add_argument('--ignore-certificate-errors')
-    # options.add_argument('--no-sandbox')
+    options.add_argument('--ignore-certificate-errors')
+    options.add_argument('--no-sandbox')
     # Instance = webdriver.Chrome(executable_path = CHROME_DRIVER, chrome_options=options)
     Instance = webdriver.Chrome(chrome_options=options)
     return Instance
