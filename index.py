@@ -60,6 +60,7 @@ Users = [
 def InitiateProgram():
   try:
     #Worker(Users[0])
+    WaitUntil5(16, 59, 30)
     with Pool(len(Users)) as p:
       p.map(Worker, Users)
       p.terminate()
@@ -82,11 +83,11 @@ def Worker(user):
   # signal.signal(signal.SIGQUIT, signal_handler)
   site = SiteMetaData(baseUrl, True, False)
   CheckSecurePage(site)
-  WaitUntil5()
+  WaitUntil5(16, 59, 55)
   Doloop(site, user)
   
-def WaitUntil5():
-  startTime = (datetime.now()).replace(hour = 16, minute = 59, second = 50) # Lucky
+def WaitUntil5(hour, minute, second):
+  startTime = (datetime.now()).replace(hour = 16, minute = 59, second = 00) # Lucky
   # startTime = (datetime.now()).replace(hour = 15, minute = 59, second = 50) # El tesoro
   # startTime = (datetime.now()).replace(hour = 19, minute = 59, second = 50) # Saldos USA
   print("Wait until: ")
