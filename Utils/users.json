@@ -1,0 +1,24 @@
+{
+    "shop": "lucky",
+    "baseUrl" : "https://www.fichascr.com/GeneradorFichas.php?CodTienda=4", 
+    "hour" : 17,
+    "users": [
+        {
+            "user": "omjrt88@gmail.com", 
+            "password": "!234s678"
+        },
+        {
+            "user": "omjrt88@hotmail.com", 
+            "password": "!234s678"
+        },
+        {
+            "user": "chinasr16@gmail.com", 
+            "password": "angelina12"
+        },
+        {
+            "user": "chinasr15@hotmail.com", 
+            "password": "123456"
+        }
+
+    ]
+}
