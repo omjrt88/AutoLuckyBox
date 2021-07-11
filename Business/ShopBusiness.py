@@ -20,10 +20,11 @@ class ShopBusiness:
   def __init__(self, shopData):
     try:
       self.shopData = shopData
-      # self.WaitUntil5(self.shopData.hour-1, 59, 30)
+      self.WaitUntil5(self.shopData.hour-1, 59, 30)
       with Pool(processes=len(self.shopData.users)) as p:
         WorkerWithUrl=partial(self.Worker, hour=self.shopData.hour)
         p.map(WorkerWithUrl, self.shopData.users)
+        p.close()
         p.terminate()
         p.join()
     except Exception as e:
@@ -41,7 +42,7 @@ class ShopBusiness:
     print(self.shopData.baseUrl)
     site = SiteMetaData(self.shopData.baseUrl, True, False)
     self.CheckSecurePage(site)
-    # self.WaitUntil5(hour-1, 59, 55)
+    self.WaitUntil5(hour-1, 59, 55)
     self.Doloop(site, user)
     
   def WaitUntil5(self, hour, minute, second):
@@ -60,7 +61,13 @@ class ShopBusiness:
 
 
   def CheckResults(self, site, user):
-    if site.findElement(By.ID, 'bGenerar'):
+    if site.AlertPresent():
+      print("Here, and Alert and it is true")
+      alertText = site.GetAlertText()
+      if "Ya ha generado la cantidad" in alertText:
+        print(alertText + "=> Closing loop.")
+      self.Close(site)
+    elif site.findElement(By.ID, 'bGenerar'):
       print("Buttom found it!")
       self.Generar(site, user)
     elif "503" in site.getDriver().Instance.page_source:
@@ -71,18 +78,19 @@ class ShopBusiness:
       self.Completed(site, user)
     elif "Reenviar Email" in site.getDriver().Instance.page_source:
       self.Completed(site, user)
+
     else:
       self.GoAgain(site, user)
 
   def Generar(self, site, user):
-    print("Logged, Starting to generate..."+ user["user"])
+    print("Logged, Starting to generate..."+ user.user)
     site.clickBy(By.ID, 'bGenerar')
     self.CheckResults(site, user)
 
-  def Completed(site, user):
-    print("Did it, check Email "+ user["user"])
+  def Completed(self, site, user):
+    print("Did it, check Email "+ user.user)
     currentDate = (datetime.now()).strftime("%d_%B_%Y")
-    site.getDriver().Instance.get_screenshot_as_file(user["user"]+"_"+currentDate+".png")
+    site.getDriver().Instance.get_screenshot_as_file(user.user+"_"+currentDate+".png")
     self.Close(site)
 
   def Close(self, site):

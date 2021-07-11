@@ -38,6 +38,15 @@ class SiteMetaData:
 	def closeThisPage(self):
 		Driver.CloseDriver()
 
+	def AlertPresent(self):
+		return EC.alert_is_present()
+
+	def GetAlertText(self):
+		alert = Driver.Instance.switch_to.alert
+		text = alert.text
+		alert.accept()
+		return text
+
 	def getReturnHistory(self, numberPages = 1):
 		Driver.Instance.execute_script("window.history.go(-"+ numberPages +")")
 		Driver.Instance.switch_to_default_content()
