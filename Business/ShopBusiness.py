@@ -70,14 +70,14 @@ class ShopBusiness:
     elif site.findElement(By.ID, 'bGenerar'):
       print("Buttom found it!")
       self.Generar(site, user)
-    elif "503" in site.getDriver().Instance.page_source:
+    elif self.CheckResults(site, "503") or self.CheckResults(site, "Page not"):
       self.GoAgain(site, user)
-    elif "Page not" in site.getDriver().Instance.page_source:
-      self.GoAgain(site, user)
-    elif "email con el código QR" in site.getDriver().Instance.page_source:
+    # elif self.CheckResults(site, "Page not"):
+    #   self.GoAgain(site, user)
+    elif self.CheckResults(site, "email con el código QR") or self.CheckResults(site, "Reenviar Email"):
       self.Completed(site, user)
-    elif "Reenviar Email" in site.getDriver().Instance.page_source:
-      self.Completed(site, user)
+    # elif self.CheckResults(site, "Reenviar Email"):
+    #   self.Completed(site, user)
 
     else:
       self.GoAgain(site, user)
@@ -111,3 +111,6 @@ class ShopBusiness:
       if site.findElement(By.ID, 'details-button'):
         site.clickBy(By.ID, 'details-button')
         site.clickBy(By.ID, 'proceed-link')
+
+  def CheckTextOnPage(self, site, text):
+    return text in site.getDriver().Instance.page_source
